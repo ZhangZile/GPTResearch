@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "gpt-researcher"
+version = "0.14.7"
+description = "GPT Researcher is an autonomous agent designed for comprehensive online research on a variety of tasks."
+license = "MIT"
+readme = "README.md"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "gpt-researcher"
+version = "0.14.7"
+description = "GPT Researcher is an autonomous agent designed for comprehensive online research on a variety of tasks."
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
