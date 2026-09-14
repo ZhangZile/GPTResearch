@@ -1,4 +1,5 @@
 from .retrievers import StaticSearchRetriever
+from .skills.browser import BrowserManager
 from .skills.researcher import ResearchConductor
 
 
@@ -8,8 +9,10 @@ class GPTResearcher:
     def __init__(self, query: str):
         self.query = query
         self.context = ""
+        self.search_results: list[dict] = []
         self.research_sources: list[dict] = []
         self.retrievers = [StaticSearchRetriever]
+        self.scraper_manager = BrowserManager(self)
         self.research_conductor = ResearchConductor(self)
 
     async def conduct_research(self) -> str:

@@ -22,20 +22,30 @@ class ResearchConductor:
         ]
         results_by_query = await asyncio.gather(*tasks)
 
-        sources = [
+        search_results = [
             source
             for query_results in results_by_query
             for source in query_results
         ]
-        self.researcher.research_sources = sources
-        return sources
+        self.researcher.search_results = search_results
+        return search_results
+
+    async def browse_search_results(self, search_results: list[dict]) -> list[dict]:
+        """把搜索结果中的 URL 交给 BrowserManager 抓取正文。"""
+        urls = [
+            source["href"]
+            for source in search_results
+            if source.get("href")
+        ]
+        return await self.researcher.scraper_manager.browse_urls(urls)
 
     async def conduct_research(self) -> str:
-        """执行规划、检索和上下文汇总。"""
+        """执行规划、检索、抓取和上下文汇总。"""
         sub_queries = await self.plan_research()
-        sources = await self.search_sub_queries(sub_queries)
+        search_results = await self.search_sub_queries(sub_queries)
+        research_sources = await self.browse_search_results(search_results)
 
-        return "\n".join(
-            f"- {source['body']}"
-            for source in sources
+        return "\n\n".join(
+            source["raw_content"]
+            for source in research_sources
         )
